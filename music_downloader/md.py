@@ -5,21 +5,24 @@ import os
 
 
 def main():
-    
-    if validation(sys.argv) == True:
-        if sys.argv[1] in ['-h', '--help']:
-            help()
-            sys.exit()
-        
-        try:
-            download(sys.argv[1], sys.argv[2])
-            print(f'Download in MP3 format successful!\nExiting now...')  
+    try:
+        if validation(sys.argv) == True:
+            if sys.argv[1] in ['-h', '--help']:
+                help()
+                sys.exit()
             
-        except:
-            sys.exit('An unexpected error occoured. Please check your URL')
+            try:
+                download(sys.argv[1], sys.argv[2])
+                print(f'Download successful!\nExiting now...')  
+                
+            except:
+                sys.exit('An unexpected error occoured. Please check your URL')
 
-    else:
-        print('Invalid usage. Type -h for the help menu.')
+        else:
+            print('Invalid usage. Type -h for the help menu.')
+    except IndexError:
+        sys.exit('Invalid usage. Type -h for the help menu.')
+
 
 def validation(command_line_arguments):
     inputs = [
@@ -29,15 +32,17 @@ def validation(command_line_arguments):
         '--playlist',
 
     ]
-
-    if command_line_arguments[1] in ['-h', '--help'] and len(command_line_arguments) == 2:
-        return True
     try:
-        match = re.match(r'^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$', sys.argv[2])
-    except:
+        if command_line_arguments[1] in ['-h', '--help'] and len(command_line_arguments) == 2:
+            return True
+        try:
+            match = re.match(r'^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$', sys.argv[2])
+        except:
+            pass
+        if (len(command_line_arguments) == 3) and (sys.argv[1] in inputs) and (match):
+            return True
+    except IndexError:
         pass
-    if (len(command_line_arguments) == 3) and (sys.argv[1] in inputs) and (match):
-        return True
 
 
 def download(type , url):
@@ -59,18 +64,20 @@ def download(type , url):
 
     else:
         pl = Playlist(url)
+        i = 1
         for vid in pl.videos:
                 try:
                     
                     stream = vid.streams.filter(only_audio=True).first()
-                    print(f'Downloading {vid.title}\n')
+                    print(f'\n{i}- Downloading {vid.title}')
                     downloaded_file = stream.download()
                     
                     base, ext = os.path.splitext(downloaded_file)
                     new_file = base + '.mp3'
                     os.rename(downloaded_file, new_file)
                     
-                    print('Downloaded in MP3 format.')
+                    print('Downloaded in MP3 format.\n')
+                    i += 1
                     
                 except KeyError:
                     print('Unable to fetch video information. Please check the URL')
