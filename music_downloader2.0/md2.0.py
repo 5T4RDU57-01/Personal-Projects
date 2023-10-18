@@ -8,10 +8,11 @@ from youtubesearchpython import VideosSearch
 def main():
     try:
         if validation(sys.argv) == True:
+            # Display help menu
             if sys.argv[1] in ['-h', '--help']:
                 help()
                 sys.exit()
-            
+            # Download from a file
             if sys.argv[1] in ['-f' , '--file']:    
                 file_down(sys.argv[2])
             else: 
@@ -38,15 +39,18 @@ def validation(command_line_arguments):
     ]
 
     try:
+        # If the user wants the help menu
         if command_line_arguments[1] in ['-h', '--help'] and len(command_line_arguments) == 2:
             return True
+        # If the user wants to download from a file
         if command_line_arguments[1] in ['-f', '--file'] and len(command_line_arguments) == 3 and str(command_line_arguments[2]).endswith('.txt'):
             return True
+        # If the user wants to download a playlist or a video
         try:
             match = re.match(r'^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$', sys.argv[2])
         except:
             pass
- 
+        # If everything checks out
         if (len(command_line_arguments) == 3) and (sys.argv[1] in inputs) and (match):
             return True
     except IndexError:
@@ -54,6 +58,7 @@ def validation(command_line_arguments):
 
 
 def download(type , url):
+    # Downloading a single video
     if type in ['-v', '--video']:
         
         try:
@@ -69,6 +74,7 @@ def download(type , url):
         except KeyError:
             print('Unable to fetch video information. Please check the URL')
 
+    # Downloading an entire playlist
     else:
         pl = Playlist(url)
         i = 1
@@ -89,19 +95,22 @@ def download(type , url):
 
 
 def change_ext(down_file):
+    
+    # Changing the extention to MP#
     base, ext = os.path.splitext(down_file)
     new_file = base + '.mp3'
     os.rename(down_file, new_file)
 
 
 def file_down(filename):
+    # Reading song names from the text file 
     try:
         with open(filename, 'r') as file:
             lines = file.readlines()
     except FileNotFoundError:
         sys.exit('File does not exist.')
     
-    
+    # Getting the URl and downloading the songs one by one
     for item in lines:
         result = VideosSearch(item + 'song' , limit=1).result()
 
@@ -110,9 +119,9 @@ def file_down(filename):
         download('-v' , url)
 
 
-
-
 def help():
+
+    # HELP MENUUUUUUUUUU
     help = [
         f"\n{'_ ' * 52}\n",
         
