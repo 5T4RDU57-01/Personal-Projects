@@ -50,6 +50,7 @@ def validation(cla):
         # If the user wants to download from a file
         if cla[1] in ['-f', '--file'] and len(cla) == 3 and (str(cla[2]).endswith('.txt') or str(cla[2]).endswith('.csv')):
             return True
+        # If the user wants to search and download a song directly
         if cla[1] in ['-d', '--down', '--download'] and len(cla) == 3:
             return True
 
