@@ -14,10 +14,10 @@ def main():
                 help()
                 sys.exit()
             # Download from a file
-            if sys.argv[1] in ['-f' , '--file']:    
+            elif sys.argv[1] in ['-f' , '--file']:    
                 file_down(sys.argv[2])
             # searching and downloading a song
-            if sys.argv[1] in ['-d', '--down', '--download']:
+            elif sys.argv[1] in ['-d', '--down', '--download']:
                 search_down(sys.argv[2])
 
             else: 
@@ -48,10 +48,10 @@ def validation(cla):
         if cla[1] in ['-h', '--help'] and len(cla) == 2:
             return True
         # If the user wants to download from a file
-        if cla[1] in ['-f', '--file'] and len(cla) == 3 and (str(cla[2]).endswith('.txt') or str(cla[2]).endswith('.csv')):
+        elif cla[1] in ['-f', '--file'] and len(cla) == 3 and (str(cla[2]).endswith('.txt') or str(cla[2]).endswith('.csv')):
             return True
         # If the user wants to search and download a song directly
-        if cla[1] in ['-d', '--down', '--download'] and len(cla) == 3:
+        elif cla[1] in ['-d', '--down', '--download'] and len(cla) == 3:
             return True
 
         # If the user wants to download a playlist or a video
@@ -105,7 +105,7 @@ def download(type , url):
 
 def change_ext(down_file):
     
-    # Changing the extention to MP#
+    # Changing the extention to MP3
     base, ext = os.path.splitext(down_file)
     new_file = base + '.mp3'
     os.rename(down_file, new_file)
@@ -139,6 +139,7 @@ def file_down(filename):
 
 
 def search_down(song):
+        # Searching and downloading a song
         result = VideosSearch(song + 'song' , limit=1).result()
 
         id = (result['result'])[0]['id']
