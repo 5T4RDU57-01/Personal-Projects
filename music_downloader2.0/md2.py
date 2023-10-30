@@ -156,12 +156,15 @@ def help():
         
         'USAGE:',
         '\n     python3 md.py [options] ([youtube url] or [filename])\n',
+        '\n     If no options are specified, the next argument is taken as the song to be downloaded.'
+        
         '\nOPTIONS:',
         '\n     "-v" or "--video": Used while downloading one video in MP3 format.',
         '\n     "-p" or "--playlist": Used while downloading a whole playlist in MP3 format.',
         '\n     "-h" or "--help": Used to display the help menu.',
         '\n     "-f" or "--file": Used to read the song names from a file (must be ".txt" or ".csv")',
         '\n     "-d" or "--down": Used to download the song specified in the next argument',
+        '\n     "-d" and "--down" work the same as if no options were specified'
         '\n\n   If "-f" or "--file" is used, the next argument must be the filename',
 
 
